@@ -1,0 +1,1088 @@
+@charset "utf-8";
+/* =========================================================
+   えん en — スタイルシート（見た目の設定）
+
+   ◆ まず触るならここ → 下の「2. 変数」ブロック
+     色・余白・白レイヤーの濃さを、数値ひとつで全体に反映できます。
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   1. リセット（ブラウザごとの初期の余白などを揃える）
+   --------------------------------------------------------- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;   /* 幅の計算に余白・線を含める（レイアウトが崩れにくい）*/
+}
+html { scroll-behavior: smooth; }          /* メニューをクリックした時ぬるっと移動 */
+body { -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+
+/* ---------------------------------------------------------
+   2. 変数（色・フォント・調整ノブ）★ここを変えると全体が変わる
+   --------------------------------------------------------- */
+:root {
+  /* 色 */
+  --ink:    #1c1b19;              /* 文字の黒（少し温かい黒）*/
+  --muted:  #77746c;              /* 補足テキストの灰色 */
+  --paper:  #ffffff;              /* 白い背景 */
+  --mist:   #f3f2ee;             /* うすいベージュ（セクションの背景）*/
+  --accent: #c9653d;             /* ロゴの柿色（アクセント。サイトで1色だけ使う）*/
+  --line:   rgba(28,27,25,.12);  /* 細い区切り線の色 */
+
+  /* フォント */
+  --jp: "Zen Kaku Gothic New", system-ui, sans-serif;  /* 日本語 */
+  --lt: "Jost", system-ui, sans-serif;                 /* 英字（細くて上品）*/
+
+  /* ヒーロー動画の上に敷く「白レイヤー」の濃さ（0〜1。上げるほど白く霞む）*/
+  --veil-edge: .58;   /* 画面の上下（メニュー・スクロール付近を白く）*/
+  --veil-mid:  .24;   /* 画面の中央（映像を見せたいので薄め）*/
+
+  --nav-h: 76px;      /* ヘッダーの高さ */
+}
+
+/* 本文の基本設定 */
+body {
+  font-family: var(--jp);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.9;
+}
+
+
+/* ---------------------------------------------------------
+   3. ヘッダー（メニュー）
+      通常は透明。スクロールすると .is-solid が付いて白帯になる（script.js）
+   --------------------------------------------------------- */
+.nav {
+  position: fixed; inset: 0 0 auto 0;   /* 画面上部に固定 */
+  height: var(--nav-h);
+  z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(20px, 5vw, 56px);    /* 左右の余白（画面幅に応じて変化）*/
+  transition: background .5s ease, box-shadow .5s ease;
+}
+.nav.is-solid {                          /* スクロール後の白帯 */
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 1px 0 var(--line);
+  backdrop-filter: blur(8px);
+}
+.nav__brand {
+  font-family: var(--lt);
+  font-weight: 500; font-size: 19px; letter-spacing: .14em;
+}
+.nav__links { display: flex; align-items: center; gap: clamp(20px, 3vw, 40px); }
+.nav__links a {
+  font-family: var(--lt);
+  font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase;
+  position: relative; padding: 6px 0;
+}
+/* リンクにマウスを乗せると柿色の下線が伸びる */
+.nav__links a::after {
+  content: ""; position: absolute; left: 0; bottom: 0;
+  width: 0; height: 1px; background: var(--accent);
+  transition: width .35s ease;
+}
+.nav__links a:hover::after,
+.nav__links a:focus-visible::after { width: 100%; }
+
+/* スマホ用メニューボタン（PCでは非表示。実際の表示切替は一番下の @media）*/
+.nav__toggle {
+  display: none; background: none; border: 0; cursor: pointer;
+  color: var(--ink); width: 30px; height: 30px;
+}
+.nav__toggle svg { width: 26px; height: 26px; }
+
+
+/* ---------------------------------------------------------
+   4. ヒーロー（全画面の動画エリア）
+   --------------------------------------------------------- */
+.hero {
+  position: relative;
+  height: 100svh; min-height: 560px;    /* 画面の高さいっぱい */
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;                     /* はみ出した動画を切り取る */
+}
+/* 背景の入れ物。動画が出るまでは poster.jpg を表示 */
+.hero__bg {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  background: url("../img/poster.jpg") center / cover no-repeat;
+}
+/* 動画を画面いっぱいにカバー */
+.hero__video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;                    /* 縦横比を保ったまま画面を覆う */
+}
+/* ★動画の上に敷く白レイヤー。上下を強め・中央を薄めにして映像を見せる
+   → 濃さは :root の --veil-edge / --veil-mid で調整 */
+.hero__scrim {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(255,255,255, var(--veil-edge)) 0%,
+    rgba(255,255,255, var(--veil-mid))  42%,
+    rgba(255,255,255, var(--veil-mid))  58%,
+    rgba(255,255,255, var(--veil-edge)) 100%);
+}
+/* ロゴの後ろのうっすら白い光（文字を読みやすく）*/
+.hero__veil {
+  position: absolute; z-index: 1;
+  width: min(760px, 88vw); height: min(760px, 88vw);
+  background: radial-gradient(circle,
+    rgba(255,255,255,.72) 0%, rgba(255,255,255,.34) 42%, rgba(255,255,255,0) 68%);
+}
+.hero__center { position: relative; z-index: 2; text-align: center; padding: 0 24px; }
+
+/* ロゴ（読み込み時にふわっと上へ出る）*/
+.hero__logo {
+  width: clamp(112px, 15vw, 148px);
+  display: block; margin: 0 auto 26px;
+  opacity: 0; transform: translateY(14px);
+  animation: rise 1.2s .25s cubic-bezier(.2,.7,.2,1) forwards;
+}
+/* キャッチコピー */
+.hero__tag {
+  font-family: var(--lt); font-weight: 300;
+  font-size: clamp(12px, 1.5vw, 14px); letter-spacing: .5em;
+  padding-left: .5em;                   /* letter-spacing の分だけ中央に寄せ直す */
+  opacity: 0; transform: translateY(14px);
+  animation: rise 1.2s .5s cubic-bezier(.2,.7,.2,1) forwards;
+}
+.hero__tag b { font-weight: 300; color: var(--accent); margin: 0 .15em; } /* 区切りの「/」だけ柿色 */
+@keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+/* 下部の SCROLL 表示（線の中を柿色の点が流れる）*/
+/* スクロール案内。縦書きの文字の下に線を引き、点が上から下へ落ちていきます。
+   中央に戻したい場合は left/bottom を
+   left:50%; bottom:0; transform:translateX(-50%); に変えてください。 */
+.hero__scroll {
+  position: absolute;
+  left: clamp(20px, 5vw, 58px);
+  bottom: 0;
+  z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px;
+  color: var(--ink);
+}
+.hero__scroll span {
+  font-family: var(--lt);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: .24em;
+  writing-mode: vertical-rl;       /* 縦書き */
+  text-orientation: mixed;
+}
+/* 線 */
+.hero__scroll i {
+  width: 1px;
+  height: 96px;
+  display: block;
+  position: relative;
+  background: var(--line);
+}
+/* 線を下りていく点 */
+.hero__scroll i::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: scrollDot 2.8s cubic-bezier(.65,0,.35,1) infinite;
+}
+@keyframes scrollDot {
+  0%        { transform: translate(-50%, 0);    opacity: 0; }
+  12%       { opacity: 1; }
+  78%       { opacity: 1; }
+  100%      { transform: translate(-50%, 96px); opacity: 0; }
+}
+
+@media (max-width: 720px) {
+  .hero__scroll { gap: 10px; }
+  .hero__scroll i { height: 64px; }
+  .hero__scroll span { font-size: 10px; }
+  @keyframes scrollDot {
+    0%   { transform: translate(-50%, 0);    opacity: 0; }
+    12%  { opacity: 1; }
+    78%  { opacity: 1; }
+    100% { transform: translate(-50%, 64px); opacity: 0; }
+  }
+}
+
+/* 動きを減らす設定のときは点を止める */
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll i::before { animation: none; opacity: 1; }
+}
+
+
+/* ---------------------------------------------------------
+   5. 各セクション共通の余白と、小さな見出し（eyebrow）
+   --------------------------------------------------------- */
+.sec { padding: clamp(88px,13vw,150px) clamp(22px,7vw,120px); }
+
+/* 「concept」などの小見出し。先頭の丸はロゴの柿色の点を再利用 */
+.ey {
+  font-family: var(--lt); font-size: 12px; letter-spacing: .28em;
+  color: var(--muted); text-transform: lowercase;
+  display: inline-flex; align-items: center; gap: 9px; margin-bottom: 22px;
+}
+.ey::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); flex: none;
+}
+
+/* スクロールで「下から＋じわっと（ぼかし）」出てくる演出（script.js が .in を付ける）
+   ・ぼかしの量 → blur(6px) / 速さ → 1.1s */
+.reveal { opacity: 0; transform: translateY(16px) scale(1.01); filter: blur(6px);
+  transition: opacity 1.1s ease, transform 1.1s cubic-bezier(.2,.7,.2,1), filter 1.1s ease; }
+.reveal.in { opacity: 1; transform: none; filter: blur(0); }
+
+
+/* ---------------------------------------------------------
+   6. コンセプト
+   --------------------------------------------------------- */
+.concept { position: relative; background: var(--paper); overflow: hidden; padding-block: clamp(64px,8vw,96px); }
+.concept__rings {                        /* 背景にうっすら重なる円 */
+  position: absolute; right: -140px; top: 50%; transform: translateY(-50%);
+  width: 520px; opacity: .06; pointer-events: none;
+}
+.concept__inner { position: relative; max-width: 760px; }
+.concept h2 {
+  font-weight: 300; font-size: clamp(22px,3.4vw,34px);
+  line-height: 1.65; letter-spacing: .04em;
+}
+.concept h2 .dot { color: var(--accent); }   /* 文末の「。」だけ柿色 */
+.concept p {
+  margin-top: 32px; max-width: 34em;
+  color: var(--muted); font-weight: 300; font-size: clamp(14px,1.6vw,16px);
+}
+
+
+/* ---------------------------------------------------------
+   7. サービス（3列）
+   --------------------------------------------------------- */
+.service { background: var(--mist); }
+.service__grid {
+  display: grid; margin-top: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));  /* 幅が狭いと自動で縦積み */
+  gap: clamp(30px,4vw,64px);
+}
+.svc__ring { width: 46px; height: 46px; margin-bottom: 22px; }
+.svc__ring circle { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+.svc__ring .a { stroke: var(--accent); }     /* 重なる2つ目の円だけ柿色 */
+.svc h3 { font-weight: 400; font-size: 19px; letter-spacing: .06em; margin-bottom: 6px; }
+.svc h3 small {
+  font-family: var(--lt); display: block; font-size: 11px; letter-spacing: .24em;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 9px; font-weight: 400;
+}
+.svc p { color: var(--muted); font-weight: 300; font-size: 14.5px; }
+
+
+/* ---------------------------------------------------------
+   8. 制作実績（円形サムネイル）
+   --------------------------------------------------------- */
+.works { background: var(--paper); }
+.works__head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.works h2 { font-weight: 300; font-size: clamp(24px,4vw,38px); letter-spacing: .06em; }
+.works__grid {
+  display: grid; margin-top: clamp(44px,6vw,72px);
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: clamp(26px,4vw,52px);
+}
+.work { text-align: center; display: block; color: inherit; }
+.work__circle {                          /* 正方形の画像を丸く切り抜く */
+  position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  background: var(--mist);
+}
+.work__circle::after {                   /* 円のふちに細い線 */
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.work__circle img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(.28);                /* 通常は少しモノトーン */
+  transition: transform .8s ease, filter .8s ease;
+}
+.work:hover .work__circle img { transform: scale(1.06); filter: grayscale(0); } /* ホバーで色が戻り拡大 */
+.work__cat  { margin-top: 18px; font-family: var(--lt); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.work__name { font-size: 15px; letter-spacing: .05em; margin-top: 3px; }
+.work__desc { font-size: 12.5px; color: var(--muted); font-weight: 300; margin-top: 5px; line-height: 1.7; }
+
+
+/* ---------------------------------------------------------
+   9. お問い合わせ
+   --------------------------------------------------------- */
+.contact { background: var(--mist); text-align: center; }
+.contact h2 { font-weight: 300; font-size: clamp(24px,4.4vw,42px); line-height: 1.6; letter-spacing: .05em; }
+.contact p { color: var(--muted); font-weight: 300; margin-top: 20px; font-size: 14.5px; }
+/* ボタン：ホバーで柿色が左から満ちる */
+.cbtn {
+  display: inline-flex; align-items: center; gap: 12px; margin-top: 40px;
+  padding: 16px 40px; border: 1px solid var(--ink);
+  font-family: var(--lt); font-size: 13px; letter-spacing: .22em; text-transform: uppercase;
+  position: relative; transition: .4s ease;
+}
+.cbtn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+  transition: transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.cbtn:hover { color: #fff; border-color: var(--accent); }
+.cbtn:hover::before { transform: scaleX(1); }
+.cbtn i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transition: background .4s; }
+.cbtn:hover i { background: #fff; }
+
+
+/* ---------------------------------------------------------
+   10. フッター
+   --------------------------------------------------------- */
+.foot {
+  background: var(--paper); border-top: 1px solid var(--line);
+  padding: 52px clamp(22px,7vw,120px);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+}
+.foot__brand { font-family: var(--lt); font-weight: 500; font-size: 17px; letter-spacing: .14em; }
+.foot small { font-family: var(--lt); font-size: 11px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+
+
+/* ---------------------------------------------------------
+   11. スマホ表示（画面幅 720px 以下）
+   --------------------------------------------------------- */
+@media (max-width: 720px) {
+  .nav__toggle { display: block; }        /* メニューボタンを表示 */
+  .nav__links {                            /* リンクは上から降りてくる開閉式に */
+    position: fixed; inset: var(--nav-h) 0 auto 0;
+    flex-direction: column; gap: 0;
+    background: rgba(255,255,255,.97); backdrop-filter: blur(10px);
+    max-height: 0; overflow: hidden; transition: max-height .45s ease;
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .nav__links.open { max-height: 320px; }  /* script.js が .open を付けると開く */
+  .nav__links a { width: 100%; text-align: center; padding: 18px 0; border-top: 1px solid var(--line); }
+  .nav__links a::after { display: none; }
+  .concept__rings { opacity: .05; right: -180px; }
+}
+
+
+/* ---------------------------------------------------------
+   12. 「視差効果を減らす」設定のユーザーには動きを止める（配慮）
+   --------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .hero__logo, .hero__tag, .reveal { opacity: 1; transform: none; filter: none; }
+  html { scroll-behavior: auto; }
+}
+
+
+/* =========================================================
+   13. サービスページ用（movie.html / 今後の web.html で共通）
+   ========================================================= */
+
+/* ページ上部の少し低めのヒーロー（トップは全画面、下層ページはこれ）*/
+.subhero {
+  position: relative; height: 60vh; min-height: 420px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  overflow: hidden;
+  background: url("../img/poster.jpg") center / cover no-repeat;
+}
+.subhero::after {                          /* 白レイヤー（トップと同じ考え方）*/
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.32) 50%, rgba(255,255,255,.62));
+}
+.subhero__inner { position: relative; z-index: 1; }
+.subhero__en { font-family: var(--lt); font-weight: 300; font-size: clamp(30px,7vw,64px); letter-spacing: .16em; }
+.subhero__jp { margin-top: 10px; font-size: 15px; letter-spacing: .3em; }
+
+/* 各ページ導入のリード文（中央寄せ）*/
+.lead { max-width: 640px; margin: 0 auto; text-align: center;
+  font-weight: 300; color: var(--muted); font-size: clamp(15px,1.8vw,17px); line-height: 2; }
+
+/* 「できること」などの説明タイル */
+.tiles { display: grid; margin-top: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: clamp(24px,4vw,48px); }
+.tile h3 { font-weight: 400; font-size: 17px; letter-spacing: .05em; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 9px; }
+.tile h3::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+.tile p { color: var(--muted); font-weight: 300; font-size: 14px; }
+
+/* 動画作品カード（再生ボタン付き。クリックで動画へ）*/
+.vgrid { display: grid; margin-top: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: clamp(24px,4vw,44px); }
+.vcard { display: block; color: inherit; }
+.vcard__thumb { position: relative; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; background: var(--mist); }
+.vcard__thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
+.vcard:hover .vcard__thumb img { transform: scale(1.05); }
+.vcard__play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.vcard__play span { width: 58px; height: 58px; border-radius: 50%;
+  background: rgba(255,255,255,.85); display: flex; align-items: center; justify-content: center; }
+.vcard__play svg { width: 20px; height: 20px; fill: var(--ink); margin-left: 3px; }
+.vcard__cat { margin-top: 16px; font-family: var(--lt); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.vcard__name { font-size: 16px; letter-spacing: .04em; margin-top: 4px; }
+
+/* 制作の流れ（縦のステップ）*/
+.flow { max-width: 620px; margin: 12px auto 0; counter-reset: step; }
+.flow li { list-style: none; position: relative; padding: 0 0 34px 54px; }
+.flow li::before { counter-increment: step; content: counter(step, decimal-leading-zero);
+  position: absolute; left: 0; top: -2px; font-family: var(--lt); font-size: 13px; color: var(--accent); letter-spacing: .1em; }
+.flow li::after { content: ""; position: absolute; left: 11px; top: 18px; bottom: 0; width: 1px; background: var(--line); }
+.flow li:last-child { padding-bottom: 0; }
+.flow li:last-child::after { display: none; }
+.flow h4 { font-weight: 400; font-size: 16px; margin-bottom: 4px; letter-spacing: .04em; }
+.flow p { color: var(--muted); font-weight: 300; font-size: 14px; }
+
+/* Web作品カード（横長・再生ボタンなし。.vgrid / .vcard を流用）*/
+.vcard--web .vcard__thumb { aspect-ratio: 16/10; }
+.vcard--web .vcard__name::after { content: " ↗"; color: var(--muted); font-size: 12px; }
+.vcard__desc { color: var(--muted); font-weight: 300; font-size: 13.5px; margin-top: 6px; line-height: 1.75; }
+
+/* 戦略セクション（マーケの考え方をWebページ内に）の小さな見出し行 */
+.pts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: clamp(22px,4vw,44px); margin-top: 12px; }
+.pt h4 { font-weight: 400; font-size: 16px; letter-spacing: .04em; margin-bottom: 6px; display: flex; align-items: center; gap: 9px; }
+.pt h4::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+.pt p { color: var(--muted); font-weight: 300; font-size: 14px; }
+
+
+/* =========================================================
+   14. 流れる画像ギャラリー（横に自動スライド）
+      ・画像は index.html の中で「2周ぶん」並べておくと途切れず繋がります
+      ・速さは下の animation の「50s」を変えると調整できます（大きいほどゆっくり）
+   ========================================================= */
+.marquee {
+  overflow: hidden;                        /* はみ出しを隠す＝スライドして見える */
+  padding: clamp(46px,7vw,96px) 0;
+  background: var(--paper);
+}
+.marquee__track {
+  display: flex; gap: 16px; width: max-content;
+  animation: marquee 50s linear infinite;  /* ← 速さはここ（秒数）*/
+}
+.marquee__item {
+  flex: none;
+  width: clamp(190px, 24vw, 280px);
+  aspect-ratio: 3 / 4;                      /* 縦長の写真 */
+  border-radius: 10px; overflow: hidden;
+}
+.marquee__item img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(.15);
+}
+/* 画像が2周ぶん並んでいる前提で、半分（＝1周）ぶん左に流す → 途切れず無限ループ */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* 動きを減らす設定の人には流さない（配慮）*/
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; }
+}
+
+
+/* =========================================================
+   15. つくる人（About）— トップページの人物セクション
+   ========================================================= */
+.about { background: var(--paper); }
+.about__grid {
+  display: grid; grid-template-columns: .85fr 1fr; align-items: center;
+  gap: clamp(32px,6vw,80px); max-width: 1000px; margin: 0 auto;
+}
+.about__photo { aspect-ratio: 4/5; overflow: hidden; border-radius: 10px; background: var(--mist); }
+.about__photo img { width: 100%; height: 100%; object-fit: cover; }
+.about__body h2 { font-weight: 300; font-size: clamp(26px,4vw,40px); letter-spacing: .05em; line-height: 1.5; }
+.about__body h2 .dot { color: var(--accent); }
+.about__name { margin-top: 22px; font-size: 15px; letter-spacing: .08em; }
+.about__name small { display: block; font-family: var(--lt); font-size: 11px; letter-spacing: .22em; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+.about__body p { margin-top: 20px; color: var(--muted); font-weight: 300; font-size: 14.5px; max-width: 32em; }
+.about__tag { margin-top: 22px; font-family: var(--lt); font-size: 12px; letter-spacing: .14em; }
+@media (max-width: 720px) {
+  .about__grid { grid-template-columns: 1fr; gap: 28px; }
+  .about__photo { max-width: 300px; }
+}
+
+
+/* =========================================================
+   16. 光る球体（web.html のヒーロー。ロゴの円を立体にした飾り）
+      ・回る速さは sphereSpin の「30s」で調整（大きいほどゆっくり）
+      ・線を濃く/薄くは .ring の border の透明度（.20 の数値）
+   ========================================================= */
+.subhero.is-sphere { background: var(--paper); }
+.subhero.is-sphere::after { display: none; }      /* 写真用の白レイヤーは使わない */
+
+.sphere {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  perspective: 1000px;                            /* 立体に見せる遠近 */
+}
+.sphere__glow {                                   /* うっすら光るにじみ */
+  position: absolute; width: min(78vh,600px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(201,101,61,.09) 0%, rgba(201,101,61,.03) 42%, rgba(255,255,255,0) 66%);
+}
+.sphere__globe {                                  /* 回る本体 */
+  position: relative; width: min(50vh,400px); aspect-ratio: 1;
+  transform-style: preserve-3d;
+  animation: sphereSpin 30s linear infinite;
+}
+.sphere .ring {                                   /* 縦の輪（経線）を回して球体に */
+  position: absolute; inset: 0; border: 1px solid rgba(28,27,25,.20); border-radius: 50%;
+}
+.sphere .ring--lat { transform: rotateX(90deg); border-color: rgba(28,27,25,.13); }  /* 赤道 */
+.sphere__dot {                                    /* 柿色の点（ロゴの点と同じ）が周回 */
+  position: absolute; top: 22%; left: 50%; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--accent); transform: translate(-50%,-50%) translateZ(180px);
+}
+@keyframes sphereSpin {
+  from { transform: rotateX(-16deg) rotateY(0deg); }
+  to   { transform: rotateX(-16deg) rotateY(360deg); }
+}
+@media (max-width: 720px) { .sphere__globe { width: min(40vh,260px); } }
+
+
+/* =========================================================
+   17. パーティクル球体（TOPの「縁」ステートメント。canvasで描画）
+   ========================================================= */
+.orb {
+  position: relative; height: 88vh; min-height: 520px; overflow: hidden;
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+}
+.orb__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.orb__copy { position: relative; z-index: 1; text-align: center; padding: 0 24px; }
+.orb__copy .ey { justify-content: center; }
+.orb__copy h2 {
+  font-weight: 300; font-size: clamp(26px,5vw,52px); letter-spacing: .06em; line-height: 1.5;
+}
+.orb__copy h2 .dot { color: var(--accent); }
+
+
+/* =========================================================
+   18. アプローチ（3つの円がつながる＋5ステップの進め方）
+   ========================================================= */
+.approach { background: var(--paper); }
+.approach__title { font-weight: 300; font-size: clamp(24px,4vw,40px); letter-spacing: .05em; margin-bottom: clamp(40px,6vw,72px); }
+.approach__title .dot { color: var(--accent); }
+
+/* 3つの円（サービス。線でつながる）*/
+.nodes { position: relative; display: flex; justify-content: space-between; gap: 24px; max-width: 880px; margin: 0 auto; }
+.nodes::before { content: ""; position: absolute; top: 50%; left: 8%; right: 8%; height: 1px; background: var(--line); }  /* つなぐ線 */
+.nodes__dot { position: absolute; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transform: translateY(-50%); animation: travel 6s linear infinite; }  /* 線を流れる柿色の点 */
+@keyframes travel { from { left: 8%; } to { left: 92%; } }
+.node {
+  position: relative; z-index: 1;
+  width: clamp(128px,20vw,178px); aspect-ratio: 1; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--paper);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  text-align: center; color: inherit; transition: border-color .4s, transform .4s;
+}
+.node:hover { border-color: var(--accent); transform: translateY(-4px); }
+.node__num { font-family: var(--lt); font-size: clamp(20px,3vw,30px); font-weight: 400; }
+.node__cat { font-family: var(--lt); font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.node__jp  { font-size: 13px; letter-spacing: .05em; }
+.node__plus { margin-top: 5px; color: var(--accent); font-family: var(--lt); font-size: 14px; }
+
+/* 5ステップ */
+.steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); list-style: none; margin-top: clamp(48px,7vw,84px); }
+.step { background: var(--mist); padding: 26px 20px; }
+.step .n { font-family: var(--lt); font-size: 10px; letter-spacing: .24em; color: var(--muted); }
+.step h4 { font-weight: 400; font-size: 15px; margin: 10px 0 8px; letter-spacing: .05em; }
+.step p { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.8; }
+
+@media (max-width: 720px) {
+  .nodes { flex-direction: column; align-items: center; gap: 18px; }
+  .nodes::before { top: 6%; bottom: 6%; left: 50%; right: auto; width: 1px; height: auto; }
+  .nodes__dot { display: none; }
+  .steps { grid-template-columns: 1fr 1fr; }
+}
+
+
+/* =========================================================
+   19. Instagram 埋め込みグリッド（movie.html）
+      ・実際の表示はインスタ公式スクリプト(embed.js)が行います
+      ・投稿を増減するときは movie.html の blockquote を足す/減らすだけ
+   ========================================================= */
+.igrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 22px; margin-top: 12px; justify-items: center; }
+.igrid .instagram-media { margin: 0 auto !important; }
+
+
+/* =========================================================
+   20. コンセプト左の「回る球体つきロゴ円」
+      ・オレンジの球体が3つの円の周りを衛星のように回る
+      ・回る速さは orbit の「9s」（大きいほどゆっくり）
+   ========================================================= */
+.concept__grid { display: grid; grid-template-columns: 1fr 280px; gap: clamp(36px,5vw,72px); align-items: center; max-width: 1040px; margin: 0 auto; }
+.cmotif { position: relative; width: min(300px,100%); aspect-ratio: 1; margin: 0 auto; }
+.cmotif__rings { position: absolute; inset: 10%; width: 80%; height: 80%; }  /* 中央の3つの円（大きめ・太め）*/
+/* 軌道を真ん中の円のふちに合わせる（inset 33.3% ＝ 半径が真ん中の円と一致）*/
+.cmotif__orbit { position: absolute; inset: 33.3%; animation: orbit 9s linear infinite; }
+.cmotif__sat {                                     /* 真ん中の円に沿って回るオレンジの球体 */
+  position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px rgba(201,101,61,.5);
+}
+@keyframes orbit { from { transform: rotate(0); } to { transform: rotate(360deg); } }  /* 時計回り */
+@media (max-width: 720px) {
+  .concept__grid { grid-template-columns: 1fr; gap: 36px; }
+  .cmotif { margin: 0; }
+}
+
+
+/* =========================================================
+   21. ヒーローのロゴの点を、円の周りで回す
+      ・ロゴは点を消した logo-nodot.png を使い、動く点を重ねている
+      ・回る速さは orbit（9s）。軌道の大きさは .hero__logo-orbit の width(%)
+      ・中心位置は top:38%（ロゴの3つの円の中心あたり）
+   ========================================================= */
+.hero__logo-wrap { position: relative; display: inline-block; margin: 0 auto 26px; }
+.hero__logo-orbit {
+  position: absolute; left: 50%; top: 38%;
+  width: 42%; aspect-ratio: 1; transform: translate(-50%,-50%);   /* 真ん中の円に沿う大きさ */
+  pointer-events: none;
+}
+.hero__logo-spin { position: absolute; inset: 0; animation: orbit 9s linear infinite; }
+.hero__logo-dot {
+  position: absolute; top: -6px; left: 50%; margin-left: -6px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 12px rgba(201,101,61,.5);
+}
+
+
+/* =========================================================
+   22. Webページの背景「幾何学模様（点と線 / particles.js）」
+      ・body.page-web を透過させて、背後の #particles-js を見せる
+      ・ヒーロー(subhero)は白のまま＝球体はクリーンな白地に
+      ・下の各セクションは透過して、うっすら星座が透ける
+   ========================================================= */
+#particles-js {
+  position: fixed; inset: 0; z-index: -1;
+  width: 100%; height: 100%;
+  background: var(--paper);           /* 白い背景の上に点と線を描く */
+  pointer-events: none;
+}
+body.page-web { background: transparent; }     /* 透過して背景を見せる */
+.page-web .sec { background: transparent; }    /* 各セクションを透過 */
+
+
+/* =========================================================
+   23. Study — 自主制作リール（movie.html。クリックで再生）
+      ・data-yt にYouTube ID。クリックで初めて動画を読み込む（軽い）
+   ========================================================= */
+.reel { max-width: 640px; margin: 0 auto; }
+.reel__player {
+  position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden;
+  background: var(--mist) center/cover no-repeat; cursor: pointer;
+}
+.reel__player .reel__iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.reel__scrim { position: absolute; inset: 0; background: rgba(28,27,25,.12); transition: background .3s; }
+.reel:hover .reel__scrim { background: rgba(28,27,25,.04); }
+.reel__play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.reel__play span {
+  width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,.85);
+  display: flex; align-items: center; justify-content: center; transition: .3s;
+}
+.reel:hover .reel__play span { background: #fff; transform: scale(1.05); }
+.reel__play svg { width: 22px; height: 22px; fill: var(--ink); margin-left: 3px; }
+.reel__cap { text-align: center; margin-top: 18px; }
+.reel__cap .c { font-family: var(--lt); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.reel__cap .n { font-size: 16px; letter-spacing: .04em; margin-top: 4px; }
+.reel__cap p { color: var(--muted); font-weight: 300; font-size: 13.5px; margin: 8px auto 0; max-width: 32em; line-height: 1.85; }
+
+
+/* =========================================================
+   24. 結果バッジ（掲載・検索順位などの客観的な実績）
+   ========================================================= */
+.badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--lt); font-size: 10.5px; letter-spacing: .1em; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: 5px 13px;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+.marquee__note { text-align: center; margin-top: 24px; padding: 0 20px; }  /* ギャラリー下の掲載バッジ */
+.work .badge { margin-top: 10px; }                                         /* 実績カード内のバッジ */
+
+
+/* ---------------------------------------------------------
+   14. オープニング（最初に一度だけ出る白い幕）
+       ・円が線で描かれ → en が浮かび → 幕ごと上へ抜ける
+       ・js/script.js が .is-done を付けると幕が上に消えます
+   --------------------------------------------------------- */
+.op {
+  position: fixed; inset: 0; z-index: 300;
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 1.1s cubic-bezier(.76,0,.18,1);
+}
+.op.is-done { transform: translateY(-101%); }
+
+.op__inner { text-align: center; }
+
+/* ロゴマーク（3つの円が順番に描かれていく）*/
+.op__mark { width: 132px; height: 130px; margin: 0 auto; overflow: visible; }
+
+.op__c {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+  /* 12時の位置から描き始める（各円は自分の中心で回す）*/
+  transform: rotate(-90deg);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: opDraw 1.05s cubic-bezier(.62,.02,.34,1) forwards;
+}
+/* 円周の長さ＝stroke-dasharray。線を一周ぶん隠しておき、0に戻すと描かれる */
+.op__c1 { stroke-dasharray: 353.7; stroke-dashoffset: 353.7; animation-delay: .20s; }
+.op__c2 { stroke-dasharray: 466.7; stroke-dashoffset: 466.7; animation-delay: .55s; }
+.op__c3 { stroke-dasharray: 377.2; stroke-dashoffset: 377.2; animation-delay: .90s; }
+
+/* 柿色の点は、円が描き終わってからポンと現れる */
+.op__dot {
+  fill: var(--accent);
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: opDot .55s cubic-bezier(.2,1.3,.4,1) 1.85s forwards;
+}
+
+/* 屋号 */
+.op__name {
+  font-family: var(--lt); font-weight: 300;
+  font-size: 1.5rem; letter-spacing: .42em; text-indent: .42em;
+  color: var(--ink);
+  margin-top: 1.6rem;
+  opacity: 0; animation: opFade .9s ease 2.15s forwards;
+}
+.op__jp {
+  font-size: .68rem; letter-spacing: .38em; text-indent: .38em;
+  color: var(--muted);
+  margin-top: .85rem;
+  opacity: 0; animation: opFade .9s ease 2.4s forwards;
+}
+
+@keyframes opDraw { to { stroke-dashoffset: 0; } }
+@keyframes opDot  { from { opacity: 0; transform: scale(.2); }
+                    to   { opacity: 1; transform: scale(1); } }
+@keyframes opFade { to { opacity: 1; } }
+
+/* 幕が明けたあと、ヒーローがふわっと立ち上がる */
+.op-active body { overflow: hidden; }
+
+/* 動きを減らす設定の人には、アニメーションなしで即表示 */
+@media (prefers-reduced-motion: reduce) {
+  .op__c { stroke-dashoffset: 0; animation: none; }
+  .op__dot, .op__name, .op__jp { opacity: 1; animation: none; }
+  .op { transition: none; }
+}
+
+
+/* ---------------------------------------------------------
+   15. 波形（aboutの下に1本だけ）
+   --------------------------------------------------------- */
+.wave {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+.wave__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+@media (max-width: 720px) {
+  .wave { height: 110px; }
+}
+
+
+/* ---------------------------------------------------------
+   16. ページトップへ戻るボタン
+       ・普段は隠れていて、少しスクロールすると下から出ます
+   --------------------------------------------------------- */
+#page-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 60;
+
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+
+  /* はじめは非表示 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1),
+              visibility .45s, border-color .3s ease;
+}
+#page-top.is-in {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+#page-top svg {
+  width: 15px; height: 15px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .3s ease;
+}
+#page-top:hover { border-color: rgba(28,27,25,.34); }
+#page-top:hover svg { transform: translateY(-2px); }
+
+@media (max-width: 720px) {
+  #page-top { right: 14px; bottom: 14px; width: 46px; height: 46px; }
+}
+
+
+/* ---------------------------------------------------------
+   17. 数字（カウントアップ）
+   --------------------------------------------------------- */
+.count {
+  font-family: var(--lt);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;  /* 桁が動いても幅がブレない */
+  letter-spacing: .02em;
+}
+
+
+/* ---------------------------------------------------------
+   18. SNS — 数字で見る実績（movie.html）
+   --------------------------------------------------------- */
+/* 左右はサムネの実寸ぴったり、真ん中は残りを使う。
+   こうしないとサムネ(9:16)が列幅より細くなり、右に空白が残ります。 */
+.sgrid {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 210px;
+  gap: clamp(20px, 3vw, 36px);
+  max-width: 940px;              /* 3枚が離れすぎないよう全体に上限 */
+  margin-top: 2.4rem;
+  align-items: end;              /* 文字の下端を揃える */
+}
+@media (max-width: 860px) {
+  .sgrid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .sgrid { grid-template-columns: 1fr; }
+}
+
+.scard { display: block; }
+
+.scard__thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;          /* 縦動画。幅は列幅にぴったり合わせる */
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--mist);
+}
+.scard__thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s cubic-bezier(.2,.8,.2,1);
+}
+.scard:hover .scard__thumb img { transform: scale(1.03); }
+
+.scard__body { padding-top: 1.1rem; }
+
+.scard__cat {
+  font-family: var(--lt);
+  font-size: .68rem;
+  letter-spacing: .22em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* 数字だけ少し大きく。ここが主役 */
+.scard__num {
+  font-family: var(--lt);
+  font-weight: 300;
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  margin-top: .5rem;
+  color: var(--ink);
+}
+.scard__num small {
+  font-size: .42em;
+  letter-spacing: .18em;
+  color: var(--muted);
+  margin-left: .5em;
+}
+
+.scard__desc {
+  font-size: .84rem;
+  color: var(--muted);
+  margin-top: .5rem;
+}
+
+/* 数字だけのカード（サムネなし）。
+   罫を写真の上端まで伸ばして、左右のサムネと同じ「帯」に見せる。
+   文字は下揃えのまま、左右のカードとベースラインが合います。 */
+.scard--result {
+  position: relative;
+  align-self: stretch;            /* 行の高さいっぱいに伸ばす */
+  display: flex;
+  flex-direction: column;
+  /* 中身をサムネの高さの約半分の位置から始める。
+     下揃えだと「沈んで」見えるので、視線の高さに合わせています。 */
+  justify-content: flex-start;
+  padding-top: calc(210px * 16 / 9 * 0.5);
+}
+.scard--result .scard__body { padding-top: 0; }
+
+/* 左のサムネから伸びて数字につながる線。
+   サムネの高さぶん（列幅210px × 16/9）だけ縦を確保し、
+   gap のぶん左にはみ出してサムネの右端に触れさせています。 */
+.scard__link {
+  position: absolute;
+  top: 0;
+  left: calc(-1 * clamp(20px, 3vw, 36px));
+  width: calc(100% + clamp(20px, 3vw, 36px));
+  height: calc(210px * 16 / 9);
+  pointer-events: none;
+}
+.scard__link path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* 線の終点。ここで視線を止める（右に抜けさせない）*/
+.scard__linkdot {
+  fill: var(--accent);
+  stroke: none;
+}
+
+/* 縦積みになる幅では線が意味をなさないので隠す */
+@media (max-width: 860px) {
+  .scard__link { display: none; }
+  .scard--result {
+    border-top: 1px solid var(--line);
+    padding-top: 1.2rem;        /* 縦積みのときは上の余白をリセット */
+  }
+}
+.scard__num .pre {
+  font-size: .52em;
+  color: var(--ink);
+  margin: 0 .06em 0 0;
+  letter-spacing: 0;
+}
+
+
+/* ---------------------------------------------------------
+   19. お問い合わせフォーム（contact.html）
+       罫線1本だけの入力欄。枠で囲うとフォームが重く見えるため。
+   --------------------------------------------------------- */
+.form-sec { max-width: 640px; }
+
+.cform__row { margin-bottom: 2.2rem; }
+
+.cform__label {
+  display: block;
+  font-size: .82rem;
+  letter-spacing: .06em;
+  color: var(--ink);
+  margin-bottom: .7rem;
+}
+.cform__label .req {
+  font-family: var(--lt);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  color: var(--accent);
+  margin-left: .6em;
+  vertical-align: .1em;
+}
+
+.cform__input {
+  width: 100%;
+  font-family: inherit;
+  font-size: .95rem;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;                 /* iOSの角丸を打ち消す */
+  padding: .6rem 0;
+  transition: border-color .35s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.cform__input::placeholder { color: rgba(28,27,25,.28); }
+.cform__input:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+.cform__textarea { resize: vertical; line-height: 1.9; }
+
+/* 相談内容のチェックボックス */
+.cform__checks { display: flex; flex-wrap: wrap; gap: .6rem; }
+.chk { position: relative; cursor: pointer; }
+.chk input {
+  position: absolute; opacity: 0; width: 0; height: 0;
+}
+.chk span {
+  display: inline-block;
+  font-size: .82rem;
+  padding: .48rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  transition: all .3s ease;
+}
+.chk input:checked + span {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.chk input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 迷惑メール対策の隠し欄 */
+.cform__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+}
+
+.cform__submit { margin-top: 3rem; }
+.cform__note {
+  font-size: .76rem;
+  color: var(--muted);
+  margin-top: 1.4rem;
+  line-height: 1.9;
+}
+
+/* フォーム以外の連絡先 */
+.alt-sec { max-width: 640px; }
+.alt__head {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: .6rem;
+}
+.alt__lead { font-size: .86rem; color: var(--muted); margin-bottom: 1.6rem; }
+.alt__list { display: flex; flex-direction: column; gap: 0; }
+.alt__item {
+  display: flex;
+  align-items: baseline;
+  gap: 1.4rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--line);
+  transition: opacity .3s ease;
+}
+.alt__item:last-child { border-bottom: 1px solid var(--line); }
+.alt__item:hover { opacity: .6; }
+.alt__k {
+  font-family: var(--lt);
+  font-size: .68rem;
+  letter-spacing: .22em;
+  color: var(--muted);
+  text-transform: uppercase;
+  min-width: 3.6em;
+}
+.alt__v { font-size: .92rem; color: var(--ink); }

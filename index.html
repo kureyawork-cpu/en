@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ▼ ページのタイトルと説明（検索結果やタブに出る文言）-->
+  <title>えん | Web・マーケティング・動画</title>
+  <meta name="description" content="えんは、お店の魅力と、それを求めるお客様をつなぐお手伝いをしています。Web制作・マーケティング・動画制作を通じて、お店の想いを届けます。">
+
+  <!-- ▼ タブ・ホーム画面に出るアイコン（ロゴの円） -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- ▼ Google Fonts（Jost＝英字用 / Zen Kaku Gothic New＝日本語用）-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- ▼ このサイトのデザイン（見た目はすべて css/style.css で決まります）-->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- =========================================================
+       オープニング（最初の一度だけ。円が描かれて幕が上に抜ける）
+       ・不要になったら、この <div class="op"> ごと削除すればOK
+       ========================================================= -->
+  <div class="op" id="op">
+    <div class="op__inner">
+      <svg class="op__mark" viewBox="-6 -6 264 261" aria-hidden="true">
+        <circle class="op__c op__c1" cx="58.29"  cy="58.07"  r="56.30"/>
+        <circle class="op__c op__c2" cx="124.54" cy="124.07" r="74.28"/>
+        <circle class="op__c op__c3" cx="189.14" cy="186.35" r="60.03"/>
+        <circle class="op__dot" cx="133.5" cy="50" r="7"/>
+      </svg>
+      <div class="op__name">en</div>
+      <div class="op__jp">えん</div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       ヘッダー（画面上部のメニュー）
+       ・スクロールすると script.js が is-solid クラスを付けて白帯に変わります
+       ========================================================= -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__brand">en</a>
+
+    <!-- スマホ用のメニュー開閉ボタン（PCでは非表示）-->
+    <button class="nav__toggle" id="toggle" aria-label="メニュー" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+        <path d="M3 7h18M3 12h18M3 17h18"/>
+      </svg>
+    </button>
+
+    <!-- メニューのリンク -->
+    <nav class="nav__links" id="links">
+      <a href="#top">Top</a>
+      <a href="movie.html">Movie</a>
+      <a href="web.html">Web</a>
+      <a href="#works">Works</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+
+  <!-- =========================================================
+       ヒーロー（一番上の全画面エリア）
+       重なり順（下→上）: 動画 → 白レイヤー → ロゴ・文字
+       ========================================================= -->
+  <section class="hero" id="top">
+    <div class="hero__bg">
+      <!-- 背景動画。差し替えるときは en-bg.mp4 を同じ名前で置き換えるだけ。
+           poster= は読み込み中に表示される静止画（動画の1コマ目）です。-->
+      <video class="hero__video" autoplay muted loop playsinline
+             poster="img/poster.jpg" aria-label="山と霧の映像">
+        <source src="en-bg.mp4" type="video/mp4">
+      </video>
+
+      <!-- 動画の上に敷く白レイヤー（濃さは style.css の --veil-* で調整）-->
+      <div class="hero__scrim"></div>
+    </div>
+
+    <!-- ロゴの後ろにうっすら白い光を置いて、文字を読みやすくしています -->
+    <div class="hero__veil" aria-hidden="true"></div>
+
+    <!-- 中央のロゴとキャッチ -->
+    <div class="hero__center">
+      <img class="hero__logo" src="img/logo.png" alt="えん ロゴ">
+      <div class="hero__tag">WEB<b>/</b>MARKETING<b>/</b>MOVIE</div>
+    </div>
+
+    <!-- 下部のスクロール案内（縦書き＋線を下りる点）-->
+    <a class="hero__scroll" href="#concept" aria-label="下へスクロール">
+      <span>Scroll Down</span><i aria-hidden="true"></i>
+    </a>
+  </section>
+
+
+  <!-- =========================================================
+       コンセプト
+       ========================================================= -->
+  <section class="sec concept reveal" id="concept">
+    <span class="ey">concept</span>
+    <div class="concept__grid">
+
+      <!-- 左: 解説テキスト -->
+      <div class="concept__inner">
+        <h2>お店の魅力と、それを求める人。<br>その距離を、Webと映像で近づけます<span class="dot">。</span></h2>
+        <p>「えん」という名前には、人とお店をつなぐ「縁」と、想いを目に見える形にする「円」の意味を込めています。まだお店を知らない方にも魅力が届くよう、企画から制作、公開後の活用までご一緒します。</p>
+      </div>
+
+      <!-- 右: ロゴの3つの円＋衛星のように回るオレンジの球体 -->
+      <div class="cmotif" aria-hidden="true">
+        <svg class="cmotif__rings" viewBox="0 0 120 120" fill="none">
+          <circle cx="31" cy="30" r="25" stroke="#1c1b19" stroke-width="2.4"/>
+          <circle cx="60" cy="60" r="25" stroke="#1c1b19" stroke-width="2.4"/>
+          <circle cx="89" cy="90" r="25" stroke="#1c1b19" stroke-width="2.4"/>
+        </svg>
+        <div class="cmotif__orbit"><span class="cmotif__sat"></span></div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       つくる人（代表の紹介）
+       ・写真は img/portrait.jpg を差し替えれば変わります
+       ========================================================= -->
+  <section class="sec about reveal" id="about">
+    <span class="ey">who we are</span>
+    <div class="about__grid">
+      <div class="about__photo"><img src="img/portrait.jpg" alt="えん 代表 呉屋栄光"></div>
+      <div class="about__body">
+        <h2>顔の見える<br>パートナーとして<span class="dot">。</span></h2>
+        <div class="about__name">呉屋 栄光<small>en / 代表</small></div>
+        <p>ご相談から企画、制作、その後のサポートまで、代表の呉屋が一貫して担当します。途中で担当者が変わらないため、お店の想いや背景を共有しながら、Webと映像を使った伝え方を一緒に考えられます。</p>
+        <div class="about__tag">企画 &nbsp;×&nbsp; 制作 &nbsp;×&nbsp; 継続サポート</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       波形（1本だけ・黒・ゆっくり）
+       ・線の太さ／速さは js/motion.js の lineWidth と t += 0.006 で調整
+       ========================================================= -->
+  <div class="wave" aria-hidden="true">
+    <canvas class="wave__canvas"></canvas>
+  </div>
+
+
+  <!-- =========================================================
+       流れる画像ギャラリー（横に自動スライド）
+       ・下のブロックは同じ6枚を「2周ぶん」並べています。
+         写真を増減するときは、必ず前半と後半を同じ内容にしてください
+         （そうしないと繋ぎ目でガクッとずれます）。
+       ========================================================= -->
+  <section class="marquee" aria-label="制作の風景">
+    <div class="marquee__track">
+      <!-- 1周目 -->
+      <div class="marquee__item"><img src="img/g1.jpg" alt=""></div>
+      <div class="marquee__item"><img src="img/g2.jpg" alt=""></div>
+      <div class="marquee__item"><img src="img/g3.jpg" alt=""></div>
+      <div class="marquee__item"><img src="img/g4.jpg" alt=""></div>
+      <div class="marquee__item"><img src="img/g5.jpg" alt=""></div>
+      <div class="marquee__item"><img src="img/g6.jpg" alt=""></div>
+      <!-- 2周目（1周目と同じ並び。繋ぎ目を消すため）-->
+      <div class="marquee__item" aria-hidden="true"><img src="img/g1.jpg" alt=""></div>
+      <div class="marquee__item" aria-hidden="true"><img src="img/g2.jpg" alt=""></div>
+      <div class="marquee__item" aria-hidden="true"><img src="img/g3.jpg" alt=""></div>
+      <div class="marquee__item" aria-hidden="true"><img src="img/g4.jpg" alt=""></div>
+      <div class="marquee__item" aria-hidden="true"><img src="img/g5.jpg" alt=""></div>
+      <div class="marquee__item" aria-hidden="true"><img src="img/g6.jpg" alt=""></div>
+    </div>
+    <p class="marquee__note"><span class="badge">北九州市 公式観光サイト「北九州パレット」掲載</span></p>
+  </section>
+
+
+  <!-- =========================================================
+       パーティクル球体（縁のステートメント / canvas は script.js が描画）
+       ========================================================= -->
+  <section class="orb" id="orb">
+    <canvas class="orb__canvas" id="globe-canvas" aria-hidden="true"></canvas>
+    <div class="orb__copy">
+      <span class="ey">en — 縁</span>
+      <h2>点と点をつなぎ、<br>新しいご縁へ<span class="dot">。</span></h2>
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       アプローチ（3つの円＝サービス／5ステップの進め方）
+       ・円をクリックすると各ページへ飛びます
+       ========================================================= -->
+  <section class="sec approach" id="service">
+    <span class="ey">approach</span>
+    <h2 class="approach__title">課題の整理から、ご一緒します<span class="dot">。</span></h2>
+
+    <div class="nodes">
+      <span class="nodes__dot" aria-hidden="true"></span>
+      <a class="node reveal" href="movie.html">
+        <span class="node__num">01</span><span class="node__cat">Movie</span>
+        <span class="node__jp">動画制作</span><span class="node__plus">+</span>
+      </a>
+      <a class="node reveal" href="web.html">
+        <span class="node__num">02</span><span class="node__cat">Web</span>
+        <span class="node__jp">Web制作</span><span class="node__plus">+</span>
+      </a>
+      <a class="node reveal" href="web.html#strategy">
+        <span class="node__num">03</span><span class="node__cat">Marketing</span>
+        <span class="node__jp">マーケティング支援</span><span class="node__plus">+</span>
+      </a>
+    </div>
+
+    <ol class="steps">
+      <li class="step reveal"><div class="n">STEP 01</div><h4>課題</h4><p>まずは現在のお悩みや、実現したいことを一緒に整理します。</p></li>
+      <li class="step reveal"><div class="n">STEP 02</div><h4>分析</h4><p>競合や市場、届けたいお客様を調べ、選ばれるための手がかりを見つけます。</p></li>
+      <li class="step reveal"><div class="n">STEP 03</div><h4>提案</h4><p>目的やご予算に合わせて、Web・映像・SNSの活用方法をご提案します。</p></li>
+      <li class="step reveal"><div class="n">STEP 04</div><h4>制作</h4><p>お店らしさを大切にしながら、伝わりやすい形へ整えていきます。</p></li>
+      <li class="step reveal"><div class="n">STEP 05</div><h4>結果</h4><p>公開後の反応を確認しながら、必要に応じて改善や活用をサポートします。</p></li>
+    </ol>
+  </section>
+
+
+  <!-- =========================================================
+       制作実績（円形サムネイル。クリックで各リンクへ）
+       ・href="#" の2件は、公開サイトのURLに書き換えてください
+       ========================================================= -->
+  <section class="sec works" id="works">
+    <div class="works__head">
+      <div>
+        <span class="ey">works</span>
+        <h2>制作実績</h2>
+      </div>
+    </div>
+
+    <div class="works__grid">
+
+      <a class="work reveal" href="https://www.instagram.com/reel/DYZbCiRS4nU/" target="_blank" rel="noopener">
+        <div class="work__circle"><img src="img/work-minpaku.jpg" alt="民泊のプロモーション動画"></div>
+        <div class="work__cat">Movie ・ 民泊</div>
+        <div class="work__name">Where Time Stays</div>
+        <div class="work__desc">宿の時間を切り取った、シネマティックな一本。</div>
+      </a>
+
+      <a class="work reveal" href="https://youtu.be/qF0RYDnBKLI" target="_blank" rel="noopener">
+        <div class="work__circle"><img src="img/work-welfare.jpg" alt="福祉事業所の開所式ドキュメント"></div>
+        <div class="work__cat">Movie ・ 福祉</div>
+        <div class="work__name">開所式ドキュメント</div>
+        <div class="work__desc">その日の熱を、そのまま記録に。</div>
+      </a>
+
+      <!-- ↓ 公開サイトのURLに書き換え -->
+      <a class="work reveal" href="works/juu/index.html" target="_blank" rel="noopener">
+        <div class="work__circle"><img src="img/work-juu.jpg" alt="JUU arts & stay のWebサイト"></div>
+        <div class="work__cat">Web ・ 宿×アート</div>
+        <div class="work__name">JUU arts &amp; stay</div>
+        <div class="work__desc">多言語サイト＋ブランド設計。大阪・此花区の宿。</div>
+        <div class="badge">Google「民泊 大阪 pv」動画検索 1位</div>
+      </a>
+
+      <!-- 実案件ページ（en-site内 works/ に収録）-->
+      <a class="work reveal" href="works/kamigaki/index.html" target="_blank" rel="noopener">
+        <div class="work__circle"><img src="img/work-kamigaki.jpg" alt="神垣商店のWebサイト"></div>
+        <div class="work__cat">Web ・ 貿易</div>
+        <div class="work__name">神垣商店</div>
+        <div class="work__desc">門司港の船用品納入業。硬派なBtoBサイト。</div>
+      </a>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       お問い合わせ
+       ・mailto: の宛先を本物のメールアドレスに変えてください
+       ========================================================= -->
+  <section class="sec contact" id="contact">
+    <span class="ey" style="justify-content:center">contact</span>
+    <h2>まずは、お店のことを<br>お聞かせください。</h2>
+    <p>まだ内容が決まっていない段階でも大丈夫です。お悩みや実現したいことを伺いながら、必要な方法を一緒に考えます。</p>
+    <a class="cbtn" href="contact.html"><i aria-hidden="true"></i>相談してみる</a>
+  </section>
+
+
+  <!-- =========================================================
+       フッター
+       ========================================================= -->
+  <footer class="foot">
+    <span class="foot__brand">en</span>
+    <small>© en — web / marketing / movie</small>
+  </footer>
+
+
+  <!-- ▼ 動き（メニュー・スクロール演出・動画再生）はすべて js/script.js -->
+  <script src="js/script.js"></script>
+
+  <!-- ページトップへ戻る（少しスクロールすると右下に出ます）-->
+  <a href="#top" id="page-top" aria-label="ページの先頭へ戻る">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </a>
+
+  <script src="js/motion.js"></script>
+
+</body>
+</html>

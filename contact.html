@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ | えん</title>
+  <meta name="description" content="えんへのお問い合わせ。Web制作・動画制作・マーケティングのご相談を承ります。まだ内容が決まっていない段階でもお気軽にご連絡ください。">
+  <!-- ▼ タブ・ホーム画面に出るアイコン（ロゴの円） -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="page-contact">
+
+  <div id="particles-js" aria-hidden="true"></div><!-- 背景の幾何学模様 -->
+
+  <!-- ヘッダー（全ページ共通）-->
+  <header class="nav" id="nav">
+    <a href="index.html" class="nav__brand">en</a>
+    <button class="nav__toggle" id="toggle" aria-label="メニュー" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+    </button>
+    <nav class="nav__links" id="links">
+      <a href="index.html">Top</a>
+      <a href="movie.html">Movie</a>
+      <a href="web.html">Web</a>
+      <a href="index.html#works">Works</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+
+  <!-- ページ上部ヒーロー -->
+  <section class="subhero">
+    <div class="subhero__inner">
+      <div class="subhero__en">CONTACT</div>
+      <div class="subhero__jp">お問い合わせ</div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       リード文
+       ========================================================= -->
+  <section class="sec">
+    <span class="ey">contact</span>
+    <h2>まずは、お店のことを<br>お聞かせください。</h2>
+    <p>
+      まだ内容が決まっていない段階でも大丈夫です。「何から手をつければいいか分からない」というご相談から承ります。
+      いただいた内容を確認のうえ、2〜3日以内に代表の呉屋よりご返信します。
+    </p>
+  </section>
+
+
+  <!-- =========================================================
+       お問い合わせフォーム
+
+       送信先は kureiative と同じ Formspree（xlgolgzr）に設定済みです。
+       同じ受信箱に届くので、件名を「【えん】〜」にして区別できるようにしています
+       （下の _subject の行）。
+       ========================================================= -->
+  <section class="sec form-sec">
+    <form class="cform" action="https://formspree.io/f/xlgolgzr" method="POST">
+
+      <div class="cform__row">
+        <label class="cform__label" for="f-name">お名前 <span class="req">必須</span></label>
+        <input class="cform__input" type="text" id="f-name" name="name" required
+               autocomplete="name" placeholder="例）呉屋 栄光">
+      </div>
+
+      <div class="cform__row">
+        <label class="cform__label" for="f-shop">店舗名・会社名</label>
+        <input class="cform__input" type="text" id="f-shop" name="company"
+               autocomplete="organization" placeholder="例）JUU arts &amp; stay">
+      </div>
+
+      <div class="cform__row">
+        <label class="cform__label" for="f-email">メールアドレス <span class="req">必須</span></label>
+        <input class="cform__input" type="email" id="f-email" name="email" required
+               autocomplete="email" placeholder="例）info@example.com">
+      </div>
+
+      <div class="cform__row">
+        <label class="cform__label" for="f-tel">お電話番号</label>
+        <input class="cform__input" type="tel" id="f-tel" name="tel"
+               autocomplete="tel" placeholder="例）090-0000-0000">
+      </div>
+
+      <div class="cform__row">
+        <span class="cform__label">ご相談の内容</span>
+        <div class="cform__checks">
+          <label class="chk"><input type="checkbox" name="genre" value="Web制作"><span>Web制作</span></label>
+          <label class="chk"><input type="checkbox" name="genre" value="動画制作"><span>動画制作</span></label>
+          <label class="chk"><input type="checkbox" name="genre" value="撮影"><span>撮影</span></label>
+          <label class="chk"><input type="checkbox" name="genre" value="SNS運用"><span>SNS運用</span></label>
+          <label class="chk"><input type="checkbox" name="genre" value="まだ決まっていない"><span>まだ決まっていない</span></label>
+        </div>
+      </div>
+
+      <div class="cform__row">
+        <label class="cform__label" for="f-msg">お問い合わせ内容 <span class="req">必須</span></label>
+        <textarea class="cform__input cform__textarea" id="f-msg" name="message" rows="7" required
+                  placeholder="お店のことや、いま困っていることをお聞かせください。&#10;まとまっていない状態のままで構いません。"></textarea>
+      </div>
+
+      <!-- 届くメールの件名。kureiative と同じ送信先なので、どちらから来たか分かるようにしています -->
+      <input type="hidden" name="_subject" value="【えん】サイトからのお問い合わせ">
+
+      <!-- 迷惑メール対策（人には見えません。ボットが書き込むと送信されません）-->
+      <div class="cform__trap" aria-hidden="true">
+        <label for="f-website">この欄は入力しないでください</label>
+        <input type="text" id="f-website" name="_gotcha" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="cform__submit">
+        <button class="cbtn" type="submit"><i aria-hidden="true"></i>この内容で送信する</button>
+        <p class="cform__note">
+          いただいた個人情報は、ご連絡とお見積りのためだけに使用します。第三者に提供することはありません。
+        </p>
+      </div>
+
+    </form>
+  </section>
+
+
+  <!-- =========================================================
+       フォーム以外の連絡手段
+       ========================================================= -->
+  <section class="sec alt-sec">
+    <h3 class="alt__head">フォーム以外でのご連絡</h3>
+    <p class="alt__lead">お急ぎの場合や、フォームが使いにくい場合はこちらから。</p>
+    <div class="alt__list">
+      <!-- ▼ 実際のアドレスに差し替えてください -->
+      <a class="alt__item" href="mailto:hello@example.com">
+        <span class="alt__k">Mail</span>
+        <span class="alt__v">hello@example.com</span>
+      </a>
+      <!-- ▼ LINE公式を用意したら、href に友だち追加URLを入れて有効化してください
+      <a class="alt__item" href="#" target="_blank" rel="noopener">
+        <span class="alt__k">LINE</span>
+        <span class="alt__v">公式アカウントで相談する</span>
+      </a>
+      -->
+    </div>
+  </section>
+
+
+  <footer class="foot">
+    <span class="foot__brand">en</span>
+    <small>© en — web / marketing / movie</small>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <!-- 背景の幾何学模様（particles.js 本体＋設定）-->
+  <script src="js/particles.js"></script>
+  <script src="js/particles-config.js"></script>
+
+  <!-- ページトップへ戻る（少しスクロールすると右下に出ます）-->
+  <a href="#top" id="page-top" aria-label="ページの先頭へ戻る">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </a>
+
+  <script src="js/motion.js"></script>
+
+</body>
+</html>
