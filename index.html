@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ▼ ページのタイトルと説明（検索結果やタブに出る文言）-->
+
   <title>えん | Web・マーケティング・動画</title>
   <meta name="description" content="えんは、お店の魅力と、それを求めるお客様をつなぐお手伝いをしています。Web制作・マーケティング・動画制作を通じて、お店の想いを届けます。">
 
@@ -18,16 +18,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <!-- ▼ このサイトのデザイン（見た目はすべて css/style.css で決まります）-->
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-  <!-- =========================================================
-       オープニング（最初の一度だけ。円が描かれて幕が上に抜ける）
-       ・不要になったら、この <div class="op"> ごと削除すればOK
-       ========================================================= -->
   <div class="op" id="op">
     <div class="op__inner">
       <svg class="op__mark" viewBox="-6 -6 264 261" aria-hidden="true">
@@ -41,10 +37,7 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       ヘッダー（画面上部のメニュー）
-       ・スクロールすると script.js が is-solid クラスを付けて白帯に変わります
-       ========================================================= -->
+
   <header class="nav" id="nav">
     <a href="#top" class="nav__brand">en</a>
 
@@ -55,7 +48,7 @@
       </svg>
     </button>
 
-    <!-- メニューのリンク -->
+
     <nav class="nav__links" id="links">
       <a href="#top">Top</a>
       <a href="movie.html">Movie</a>
@@ -66,14 +59,9 @@
   </header>
 
 
-  <!-- =========================================================
-       ヒーロー（一番上の全画面エリア）
-       重なり順（下→上）: 動画 → 白レイヤー → ロゴ・文字
-       ========================================================= -->
   <section class="hero" id="top">
     <div class="hero__bg">
-      <!-- 背景動画。差し替えるときは en-bg.mp4 を同じ名前で置き換えるだけ。
-           poster= は読み込み中に表示される静止画（動画の1コマ目）です。-->
+
       <video class="hero__video" autoplay muted loop playsinline
              poster="img/poster.jpg" aria-label="山と霧の映像">
         <source src="en-bg.mp4" type="video/mp4">
@@ -99,20 +87,18 @@
   </section>
 
 
-  <!-- =========================================================
-       コンセプト
-       ========================================================= -->
+
   <section class="sec concept reveal" id="concept">
     <span class="ey">concept</span>
     <div class="concept__grid">
 
-      <!-- 左: 解説テキスト -->
+
       <div class="concept__inner">
         <h1>お店の魅力と、それを求める人。<br>その距離を、Webと映像で近づけます<span class="dot">。</span></h1>
         <p>「えん」という名前には、人とお店をつなぐ「縁」と、想いを目に見える形にする「円」の意味を込めています。まだお店を知らない方にも魅力が届くよう、企画から制作、公開後の活用までご一緒します。</p>
       </div>
 
-      <!-- 右: ロゴの3つの円＋衛星のように回るオレンジの球体 -->
+
       <div class="cmotif" aria-hidden="true">
         <svg class="cmotif__rings" viewBox="0 0 120 120" fill="none">
           <circle cx="31" cy="30" r="25" stroke="#1c1b19" stroke-width="2.4"/>
@@ -126,10 +112,7 @@
   </section>
 
 
-  <!-- =========================================================
-       つくる人（代表の紹介）
-       ・写真は img/portrait.jpg を差し替えれば変わります
-       ========================================================= -->
+
   <section class="sec about reveal" id="about">
     <span class="ey">who we are</span>
     <div class="about__grid">
@@ -144,21 +127,13 @@
   </section>
 
 
-  <!-- =========================================================
-       波形（1本だけ・黒・ゆっくり）
-       ・線の太さ／速さは js/motion.js の lineWidth と t += 0.006 で調整
-       ========================================================= -->
+
   <div class="wave" aria-hidden="true">
     <canvas class="wave__canvas"></canvas>
   </div>
 
 
-  <!-- =========================================================
-       流れる画像ギャラリー（横に自動スライド）
-       ・下のブロックは同じ6枚を「2周ぶん」並べています。
-         写真を増減するときは、必ず前半と後半を同じ内容にしてください
-         （そうしないと繋ぎ目でガクッとずれます）。
-       ========================================================= -->
+
   <section class="marquee" aria-label="制作の風景">
     <div class="marquee__track">
       <!-- 1周目 -->
@@ -180,9 +155,7 @@
   </section>
 
 
-  <!-- =========================================================
-       パーティクル球体（縁のステートメント / canvas は script.js が描画）
-       ========================================================= -->
+
   <section class="orb" id="orb">
     <canvas class="orb__canvas" id="globe-canvas" aria-hidden="true"></canvas>
     <div class="orb__copy">
@@ -192,10 +165,7 @@
   </section>
 
 
-  <!-- =========================================================
-       アプローチ（3つの円＝サービス／5ステップの進め方）
-       ・円をクリックすると各ページへ飛びます
-       ========================================================= -->
+
   <section class="sec approach" id="service">
     <span class="ey">approach</span>
     <h3 class="approach__title">課題の整理から、ご一緒します<span class="dot">。</span></h3>
@@ -226,10 +196,6 @@
   </section>
 
 
-  <!-- =========================================================
-       制作実績（円形サムネイル。クリックで各リンクへ）
-       ・href="#" の2件は、公開サイトのURLに書き換えてください
-       ========================================================= -->
   <section class="sec works" id="works">
     <div class="works__head">
       <div>
@@ -275,10 +241,7 @@
   </section>
 
 
-  <!-- =========================================================
-       お問い合わせ
-       ・mailto: の宛先を本物のメールアドレスに変えてください
-       ========================================================= -->
+
   <section class="sec contact" id="contact">
     <span class="ey" style="justify-content:center">contact</span>
     <h2>まずは、お店のことを<br>お聞かせください。</h2>
@@ -287,9 +250,7 @@
   </section>
 
 
-  <!-- =========================================================
-       フッター
-       ========================================================= -->
+
   <footer class="foot">
     <span class="foot__brand">en</span>
     <small>© en — web / marketing / movie</small>
