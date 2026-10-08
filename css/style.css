@@ -1107,3 +1107,12 @@ body.page-web { background: transparent; }     /* 透過して背景を見せる
   min-width: 3.6em;
 }
 .alt__v { font-size: .92rem; color: var(--ink); }
+
+/* サービスページのセクション見出し */
+.seo-section-title {
+  font-weight: 300;
+  font-size: clamp(22px, 3vw, 32px);
+  letter-spacing: .05em;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
