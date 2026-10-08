@@ -394,7 +394,12 @@ body {
 }
 .subhero__inner { position: relative; z-index: 1; }
 .subhero__en { font-family: var(--lt); font-weight: 300; font-size: clamp(30px,7vw,64px); letter-spacing: .16em; }
-.subhero__jp { margin-top: 10px; font-size: 15px; letter-spacing: .3em; }
+.subhero__jp {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: .3em;
+}
 
 /* 各ページ導入のリード文（中央寄せ）*/
 .lead { max-width: 640px; margin: 0 auto; text-align: center;
