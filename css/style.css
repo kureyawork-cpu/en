@@ -445,8 +445,8 @@ body {
 
 /* 戦略セクション（マーケの考え方をWebページ内に）の小さな見出し行 */
 .pts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: clamp(22px,4vw,44px); margin-top: 12px; }
-.pt h4 { font-weight: 400; font-size: 16px; letter-spacing: .04em; margin-bottom: 6px; display: flex; align-items: center; gap: 9px; }
-.pt h4::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+.pt h3 { font-weight: 400; font-size: 16px; letter-spacing: .04em; margin-bottom: 6px; display: flex; align-items: center; gap: 9px; }
+.pt h3::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
 .pt p { color: var(--muted); font-weight: 300; font-size: 14px; }
 
 
