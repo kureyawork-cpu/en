@@ -561,7 +561,23 @@ body {
 .approach { background: var(--paper); }
 .approach__title { font-weight: 300; font-size: clamp(24px,4vw,40px); letter-spacing: .05em; margin-bottom: clamp(40px,6vw,72px); }
 .approach__title .dot { color: var(--accent); }
+/* SEO向けサービス説明文 */
+.approach__lead {
+  max-width: 680px;
+  margin: -30px 0 50px;
+  color: var(--muted);
+  font-weight: 300;
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 2;
+  letter-spacing: .03em;
+}
 
+@media (max-width: 720px) {
+  .approach__lead {
+    margin: -15px 0 40px;
+    font-size: 14px;
+  }
+}
 /* 3つの円（サービス。線でつながる）*/
 .nodes { position: relative; display: flex; justify-content: space-between; gap: 24px; max-width: 880px; margin: 0 auto; }
 .nodes::before { content: ""; position: absolute; top: 50%; left: 8%; right: 8%; height: 1px; background: var(--line); }  /* つなぐ線 */
